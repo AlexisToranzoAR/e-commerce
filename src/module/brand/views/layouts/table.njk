@@ -1,0 +1,28 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Brand</th>
+        <th scope="col">Logo</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for brand in brands %}
+        <tr>
+          <th scope="row">{{ brand.id }}</th>
+          <td>{{ brand.name }}</td>
+          <td>
+            <img src="data:image/png;base64, {{ brand.image }}" alt="Logo of {{ brand.name }}" class="img-thumbnail">
+          </td>
+          <td>
+            <a href="/admin/brand/edit/{{ brand.id }}" class="btn btn-outline-primary">Edit</a>
+          </td>
+          <td>
+            <a href="/admin/brand/delete/{{ brand.id }}" class="btn btn-outline-danger">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>

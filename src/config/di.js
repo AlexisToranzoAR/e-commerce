@@ -6,7 +6,19 @@ const multer = require('multer');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
-//modules declaration
+const {
+  AdminController,
+  AdminService,
+  AdminRepository,
+  AdminModel,
+} = require('../module/admin/module');
+
+const {
+  BrandController,
+  BrandService,
+  BrandRepository,
+  BrandModel,
+} = require('../module/brand/module');
 
 function configureSequelizeDatabase() {
   if (process.env.NODE_ENV === 'development') {
@@ -45,6 +57,16 @@ function configureMulter() {
   return multer({ buffer });
 }
 
+function configureBrandModule(container) {
+  return BrandModel.setup(container.get('Sequelize'));
+}
+
+function configureAdminModule(container) {
+  return AdminModel.setup(container.get('Sequelize'));
+}
+
+// configure models
+
 function addCommonDefinitions(container) {
   container.addDefinitions({
     Sequelize: factory(configureSequelizeDatabase),
@@ -53,14 +75,30 @@ function addCommonDefinitions(container) {
   });
 }
 
-// configure models
+function addBrandModuleDefinitions(container) {
+  container.addDefinitions({
+    BrandController: object(BrandController).construct(get('BrandService'), get('Multer')),
+    BrandService: object(BrandService).construct(get('BrandRepository')),
+    BrandRepository: object(BrandRepository).construct(get('BrandModel')),
+    BrandModel: factory(configureBrandModule),
+  });
+}
 
-// add modules definitions
+function addAdminModuleDefinitions(container) {
+  container.addDefinitions({
+    AdminController: object(AdminController).construct(get('AdminService')),
+    AdminService: object(AdminService).construct(get('AdminRepository')),
+    AdminRepository: object(AdminRepository).construct(get('AdminModel')),
+    AdminModel: factory(configureAdminModule),
+  });
+}
 
 // setup associations
 
 module.exports = function configureDI() {
   const container = new DIContainer();
   addCommonDefinitions(container);
+  addAdminModuleDefinitions(container);
+  addBrandModuleDefinitions(container);
   return container;
 };
