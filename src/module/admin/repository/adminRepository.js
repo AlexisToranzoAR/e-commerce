@@ -10,7 +10,10 @@ module.exports = class BrandRepository {
   }
 
   async getAll() {
-    return this.adminModel.findAll();
+    const adminInstances = await this.adminModel.findAll({
+      order: [['id', 'ASC']],
+    });
+    return adminInstances.map(fromModelToEntity);
   }
 
   async getById(adminId) {

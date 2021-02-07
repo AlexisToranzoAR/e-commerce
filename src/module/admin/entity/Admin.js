@@ -16,5 +16,20 @@ module.exports = class Admin {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
+    this.formattedDates = this.formatDate();
+  }
+
+  formatDate() {
+    const [createdAt, updatedAt, deletedAt] = [this.createdAt, this.updatedAt, this.deletedAt].map(
+      (date) =>
+        new Date(date).toLocaleString(false, {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+        })
+    );
+    return { createdAt, updatedAt, deletedAt };
   }
 };
+
+/*  */

@@ -1,6 +1,7 @@
-<form class="form-horizontal" action="/admin/administrators/save" method="POST">
+<form class="form-horizontal" action="/admin/administrators/save" id="form-admin" method="POST">
   <div class="card-body">
     <div class="form-group row">
+      <input type="hidden" name="id" value="{{admin.id}}" readonly/>
       <label for="inputFullName" class="col-sm-2 col-form-label">Full Name</label>
       <div class="col-sm-10">
         <input
@@ -9,6 +10,7 @@
           id="inputFullName"
           name="full-name"
           placeholder="Your full name"
+          value="{{admin.fullName}}"
         />
       </div>
     </div>
@@ -21,6 +23,7 @@
           id="inputUsername"
           name="username"
           placeholder="Username"
+          value="{{admin.username}}"
         />
       </div>
     </div>
@@ -39,7 +42,7 @@
   </div>
   <!-- /.card-body -->
   <div class="card-footer">
-    <button type="submit" class="btn btn-info float-right">Create</button>
+    <button type="submit" class="btn btn-info float-right">Save</button>
   </div>
   <!-- /.card-footer -->
 </form>

@@ -1,4 +1,4 @@
-<table class="table table-bordered">
+<table class="table">
   <thead>
     <tr>
       <th style="width: 10px">#</th>
@@ -6,16 +6,28 @@
       <th>Username</th>
       <th>Updated At</th>
       <th>Created At</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-    {% for admin in admins %}
-      <td>{{admin.id}}</td>
+      {% for admin in admins %}
+      <td>{{admin.id}}.</td>
       <td>{{admin.fullName}}</td>
-      <td>{{admin.username}}</td>
-      <td>{{admin.updatedAt}}</td>
-      <td>{{admin.createdAt}}</td>
+      <td>@{{admin.username}}</td>
+      <td>{{admin.formattedDates.updatedAt}}</td>
+      <td>{{admin.formattedDates.createdAt}}</td>
+      <td>
+        <div class="btn-group">
+          <a href="/admin/administrator/{{admin.id}}/edit" class="btn btn-outline-primary">Edit</a>
+          <a
+            href="/admin/administrator/{{admin.id}}/delete"
+            class="btn btn-outline-danger delete-button"
+          >
+            Delete
+          </a>
+        </div>
+      </td>
     </tr>
     {% endfor %}
   </tbody>

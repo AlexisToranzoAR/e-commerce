@@ -29,6 +29,6 @@ module.exports = class AdminService {
     if (!(admin instanceof Admin)) {
       throw new AdminNotDefinedError();
     }
-    return this.adminsRepository.delete(admin);
+    return this.adminRepository.delete(admin);
   }
 };

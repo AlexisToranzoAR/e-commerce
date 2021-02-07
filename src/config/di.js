@@ -2,6 +2,7 @@ require('dotenv').config();
 const { default: DIContainer, object, get, factory } = require('rsdi');
 const { Sequelize } = require('sequelize');
 const multer = require('multer');
+const jsonWebToken = require('jsonwebtoken');
 
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -72,6 +73,7 @@ function addCommonDefinitions(container) {
     Sequelize: factory(configureSequelizeDatabase),
     Session: factory(configureSession),
     Multer: factory(configureMulter),
+    JsonWebToken: jsonWebToken,
   });
 }
 
@@ -86,7 +88,11 @@ function addBrandModuleDefinitions(container) {
 
 function addAdminModuleDefinitions(container) {
   container.addDefinitions({
-    AdminController: object(AdminController).construct(get('AdminService')),
+    AdminController: object(AdminController).construct(
+      get('AdminService'),
+      get('Multer'),
+      get('JsonWebToken')
+    ),
     AdminService: object(AdminService).construct(get('AdminRepository')),
     AdminRepository: object(AdminRepository).construct(get('AdminModel')),
     AdminModel: factory(configureAdminModule),

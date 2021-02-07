@@ -11,7 +11,7 @@ async function fromDataToEntity({ id, 'full-name': fullName, username, password 
     id,
     fullName,
     username,
-    password: await hashPassword(password),
+    password: password ? await hashPassword(password) : undefined,
   });
 }
 
