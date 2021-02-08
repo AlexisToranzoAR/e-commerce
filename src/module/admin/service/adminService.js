@@ -1,4 +1,5 @@
 const AdminIdNotDefinedError = require('../error/AdminIdNotDefinedError');
+const AdminUsernameNotDefinedError = require('../error/AdminUsernameNotDefinedError');
 const AdminNotDefinedError = require('../error/AdminNotDefinedError');
 const Admin = require('../entity/Admin');
 
@@ -16,6 +17,13 @@ module.exports = class AdminService {
       throw new AdminIdNotDefinedError();
     }
     return this.adminRepository.getById(adminId);
+  }
+
+  async getByUsername(username) {
+    if (!String(username)) {
+      throw new AdminUsernameNotDefinedError();
+    }
+    return this.adminRepository.getByUsername(username);
   }
 
   async save(admin) {

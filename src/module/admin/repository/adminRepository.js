@@ -1,5 +1,6 @@
 const AdminNotDefinedError = require('../error/AdminNotDefinedError');
 const AdminIdNotDefinedError = require('../error/AdminIdNotDefinedError');
+const AdminUsernameNotDefinedError = require('../error/AdminUsernameNotDefinedError');
 const AdminNotFoundError = require('../error/AdminNotFoundError');
 const { fromModelToEntity } = require('../mapper/adminMapper');
 const Admin = require('../entity/Admin');
@@ -23,6 +24,20 @@ module.exports = class BrandRepository {
     const adminInstance = await this.adminModel.findByPk(adminId);
     if (!adminInstance) {
       throw new AdminNotFoundError(`There is no existing admin with ID ${adminId}`);
+    }
+
+    return fromModelToEntity(adminInstance);
+  }
+
+  async getByUsername(username) {
+    if (!String(username)) {
+      throw new AdminUsernameNotDefinedError();
+    }
+    const adminInstance = await this.adminModel.findOne({
+      where: { username: username },
+    });
+    if (!adminInstance) {
+      throw new AdminNotFoundError(`There is no existing admin with username ${username}`);
     }
 
     return fromModelToEntity(adminInstance);

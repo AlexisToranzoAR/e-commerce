@@ -15,7 +15,7 @@ module.exports = class AdminController {
 
     app.get(`${ROUTE}/`, verifyToken, this.dashboard.bind(this));
     app.get(`${ROUTE}/login`, this.loginForm.bind(this));
-    //app.post(`${ROUTE}/login`, this.login.bind(this));
+    app.post(`${ROUTE}/login`, this.login.bind(this));
     //app.get(`${ROUTE}/logout`, this.logout.bind(this));
     app.get(`${ROUTE}/administrators`, this.index.bind(this));
     app.get(`${ROUTE}/administrators/create`, this.create.bind(this));
@@ -30,6 +30,26 @@ module.exports = class AdminController {
 
   async loginForm(req, res) {
     res.render(`${this.VIEWS_DIR}/login.html`);
+  }
+
+  async login(req, res) {
+    try {
+      const { username, password } = req.body;
+      const admin = await this.adminService.getByUsername(username);
+      const validPassword = await admin.comparePassword(password);
+      if (!validPassword) {
+        return res.status(401).send({ auth: false, token: null });
+      }
+      const token = this.jwt.sign({ id: admin.id }, process.env.TOKEN_SECRET, {
+        expiresIn: 604800000,
+      });
+      res.json({
+        auth: true,
+        token,
+      });
+    } catch (e) {
+      res.status(404).send("The username doesn't exists");
+    }
   }
 
   async index(req, res) {

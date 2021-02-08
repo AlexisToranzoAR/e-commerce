@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 module.exports = class Admin {
   /**
    * @param {number} id
@@ -30,6 +32,8 @@ module.exports = class Admin {
     );
     return { createdAt, updatedAt, deletedAt };
   }
-};
 
-/*  */
+  async comparePassword(password) {
+    return bcrypt.compare(password, this.password);
+  }
+};
