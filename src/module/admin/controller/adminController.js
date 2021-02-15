@@ -16,12 +16,12 @@ module.exports = class AdminController {
     app.get(`${ROUTE}/`, verifyToken, this.dashboard.bind(this));
     app.get(`${ROUTE}/login`, this.loginForm.bind(this));
     app.post(`${ROUTE}/login`, this.login.bind(this));
-    //app.get(`${ROUTE}/logout`, this.logout.bind(this));
-    app.get(`${ROUTE}/administrators`, this.index.bind(this));
-    app.get(`${ROUTE}/administrators/create`, this.create.bind(this));
-    app.post(`${ROUTE}/administrators/save`, this.save.bind(this));
-    app.get(`${ROUTE}/administrator/:id/edit`, this.edit.bind(this));
-    app.get(`${ROUTE}/administrator/:id/delete`, this.delete.bind(this));
+    app.get(`${ROUTE}/logout`, this.logout.bind(this));
+    app.get(`${ROUTE}/administrators`, verifyToken, this.index.bind(this));
+    app.get(`${ROUTE}/administrators/create`, verifyToken, this.create.bind(this));
+    app.post(`${ROUTE}/administrators/save`, verifyToken, this.save.bind(this));
+    app.get(`${ROUTE}/administrator/:id/edit`, verifyToken, this.edit.bind(this));
+    app.get(`${ROUTE}/administrator/:id/delete`, verifyToken, this.delete.bind(this));
   }
 
   async dashboard(req, res) {
@@ -43,20 +43,29 @@ module.exports = class AdminController {
       const token = this.jwt.sign({ id: admin.id }, process.env.TOKEN_SECRET, {
         expiresIn: 604800000,
       });
-      res.json({
+      req.session.token = token;
+      res.redirect(`${this.ROUTE_BASE}/`);
+      /* res.json({
         auth: true,
         token,
-      });
+      }); */
     } catch (e) {
       res.status(404).send("The username doesn't exists");
     }
   }
 
+  async logout(req, res) {
+    req.session.token = null;
+    res.redirect(`${this.ROUTE_BASE}/login`);
+  }
+
   async index(req, res) {
+    const admin = await this.adminService.getById(req.adminId);
     const admins = await this.adminService.getAll();
     const { errors, messages } = req.session;
 
     res.render(`${this.VIEWS_DIR}/index.html`, {
+      admin,
       admins,
       messages,
       errors,
@@ -76,6 +85,7 @@ module.exports = class AdminController {
       const token = this.jwt.sign({ id: savedAdmin.id }, process.env.TOKEN_SECRET, {
         expiresIn: 604800000,
       });
+      req.session.token = token;
       if (admin.id) {
         res.json({
           auth: true,

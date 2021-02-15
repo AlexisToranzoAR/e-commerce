@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 function verifyToken(req, res, next) {
-  const token = req.headers['x-access-token'];
+  const { token } = req.session;
+  //const token = req.headers['x-access-token'];
   if (!token) {
     return res.status(401).json({
       auth: false,
@@ -9,7 +10,7 @@ function verifyToken(req, res, next) {
     });
   }
   const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
-  req.userId = decoded.id;
+  req.adminId = decoded.id;
   next();
 }
 
