@@ -17,14 +17,28 @@ module.exports = class AdminModel extends Model {
         },
         fullName: {
           type: DataTypes.STRING,
-          allowNull: false,
+          validate: {
+            len: {
+              args: [1, 50],
+              msg: 'Fullname between 1 to 50 chars',
+            },
+          },
         },
         username: {
           type: DataTypes.STRING,
-          allowNull: false,
+          validate: {
+            len: {
+              args: [1, 50],
+              msg: 'Username between 1 to 50 chars',
+            },
+          },
           unique: true,
         },
         password: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        role: {
           type: DataTypes.STRING,
           allowNull: false,
         },

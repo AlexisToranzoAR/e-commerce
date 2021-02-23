@@ -1,21 +1,21 @@
-<form class="form-horizontal" action="/admin/administrators/save" id="form-admin" method="POST">
+<form class="form-horizontal" action="/admin/administrators/create" id="form-admin" method="POST">
   <div class="card-body">
     <div class="form-group row">
-      <input type="hidden" name="id" value="{{admin.id}}" readonly/>
-      <label for="inputFullName" class="col-sm-2 col-form-label">Full Name</label>
+      <input type="hidden" name="id" value="{{admin.id}}" readonly />
+      <label for="full-name" class="col-sm-2 col-form-label">Full name</label>
       <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
           id="inputFullName"
           name="full-name"
-          placeholder="Your full name"
+          placeholder="Full name"
           value="{{admin.fullName}}"
         />
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+      <label for="username" class="col-sm-2 col-form-label">Username</label>
       <div class="col-sm-10">
         <input
           type="text"
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+      <label for="password" class="col-sm-2 col-form-label">Password</label>
       <div class="col-sm-10">
         <input
           type="password"
@@ -38,6 +38,14 @@
           placeholder="Password"
         />
       </div>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="role" id="role1" value="admin"  checked/>
+      <label class="form-check-label" for="role1">Admin</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="role" id="role2" value="superadmin" />
+      <label class="form-check-label" for="role2">Super Admin</label>
     </div>
   </div>
   <!-- /.card-body -->

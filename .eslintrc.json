@@ -1,5 +1,5 @@
 {
-  "extends": ["airbnb", "prettier", "jquery"],
+  "extends": ["airbnb", "prettier"],
   "plugins": ["prettier", "jest"],
   "env": {
     "jest/globals": true

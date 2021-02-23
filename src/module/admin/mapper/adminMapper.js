@@ -6,13 +6,16 @@ async function hashPassword(password) {
   return bcrypt.hash(password, costFactor).then((hash) => hash);
 }
 
-async function fromDataToEntity({ id, 'full-name': fullName, username, password }) {
-  return new Admin({
+async function fromDataToEntity({ id, 'full-name': fullName, username, password, role }) {
+  const admin = new Admin({
     id,
     fullName,
     username,
-    password: password ? await hashPassword(password) : undefined,
+    password,
+    role,
   });
+  await admin.hashPassword();
+  return admin;
 }
 
 function fromModelToEntity(model) {

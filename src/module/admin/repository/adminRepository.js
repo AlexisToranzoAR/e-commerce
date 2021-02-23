@@ -12,6 +12,7 @@ module.exports = class BrandRepository {
 
   async getAll() {
     const adminInstances = await this.adminModel.findAll({
+      attributes: { exclude: ['password'] },
       order: [['id', 'ASC']],
     });
     return adminInstances.map(fromModelToEntity);
@@ -34,7 +35,7 @@ module.exports = class BrandRepository {
       throw new AdminUsernameNotDefinedError();
     }
     const adminInstance = await this.adminModel.findOne({
-      where: { username: username },
+      where: { username },
     });
     if (!adminInstance) {
       throw new AdminNotFoundError(`There is no existing admin with username ${username}`);

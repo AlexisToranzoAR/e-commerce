@@ -6,18 +6,20 @@ module.exports = class Admin {
    * @param {string} fullName
    * @param {string} username
    * @param {string} password
+   * @param {boolean} role
    * @param {string} createdAt
    * @param {string} updatedAt
    * @param {string} deletedAt
    */
-  constructor({ id, fullName, username, password, createdAt, updatedAt, deletedAt }) {
+  constructor({ id, fullName, username, password, role, createdAt, updatedAt, deletedAt }) {
     this.id = id;
     this.fullName = fullName;
     this.username = username;
     this.password = password;
+    this.role = role;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.deletedAt = deletedAt;
+    this.deletedAt = deletedAt || undefined;
     this.formattedDates = this.formatDate();
   }
 
@@ -31,6 +33,13 @@ module.exports = class Admin {
         })
     );
     return { createdAt, updatedAt, deletedAt };
+  }
+
+  async hashPassword() {
+    const costFactor = 10;
+    return bcrypt.hash(this.password, costFactor).then((hash) => {
+      this.password = hash;
+    });
   }
 
   async comparePassword(password) {
